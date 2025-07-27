@@ -10,6 +10,7 @@ A modular, production-ready dialogue summarization system built with PyTorch Lig
     micromamba env create -f environment.yml
     micromamba activate dialogue-summarization
     ```
+<<<<<<< HEAD
     **Remove Environment**
     ```bash
     micromamba env list
@@ -24,11 +25,22 @@ A modular, production-ready dialogue summarization system built with PyTorch Lig
 
     # All other dependencies are installed via environment.yml automatically.
     # If you need extras, add them to environment.yml under pip: section.
+=======
+
+2.  **Install Dependencies**
+    ```bash
+    # Install PyTorch with CUDA support
+    pip install torch torchvision torchaudio --index-url [https://download.pytorch.org/whl/cu121](https://download.pytorch.org/whl/cu121)
+
+    # Install remaining packages
+    pip install -r requirements.txt
+>>>>>>> Fixed critical error in evaluate.py and kobart_model.py. Evaluate method
     ```
 
 3.  **Train Model**
     ```bash
     python scripts/train.py train --config-name config
+<<<<<<< HEAD
     python scripts/train.py train --config-name kobart-base-v2
     python scripts/train.py train --config-name config
     python scripts/train.py train --config-name config-baseline-centralized
@@ -78,11 +90,14 @@ A modular, production-ready dialogue summarization system built with PyTorch Lig
     data/dev.csv \
     test_summary_fix.csv \
     --config-name config-baseline-centralized
+=======
+>>>>>>> Fixed critical error in evaluate.py and kobart_model.py. Evaluate method
     ```
 
 4.  **Generate Predictions**
     ```bash
     python scripts/inference.py submission /path/to/best/model.ckpt
+<<<<<<< HEAD
 
     python scripts/inference.py submission \
     'outputs/models/best-epoch=00-val_rouge_f=val/rouge_f=0.5597.ckpt' \
@@ -94,6 +109,10 @@ export WANDB_API_KEY="YOUR_API_KEY"
 source ~/.bashrc
 wandb login
 ```
+=======
+    ```
+
+>>>>>>> Fixed critical error in evaluate.py and kobart_model.py. Evaluate method
 
 ```markdown
 ## 📁 Project Structure
