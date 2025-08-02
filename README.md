@@ -130,4 +130,8 @@ micromamba remove -n dialogue-summarization --all
 rm -rf /opt/conda/envs/dialogue-summarization
 ```
 ```
+## Clear PyCache
+```bash
+find . -type d -name "__pycache__" -exec rm -rf {} +
+```
 
