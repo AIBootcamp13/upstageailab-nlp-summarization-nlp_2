@@ -1,6 +1,6 @@
 # Dialogue Summarization with PyTorch Lightning & Hydra
 
-A modular, production-ready dialogue summarization system built with PyTorch Lightning and Hydra configuration management for Korean dialogue summarization tasks.
+A modular dialogue summarization system for Korean text built with PyTorch Lightning and Hydra configuration management.
 
 ## Team
 
@@ -13,9 +13,12 @@ A modular, production-ready dialogue summarization system built with PyTorch Lig
 
 ### 1. Environment Setup
 ```bash
-# Create environment
-micromamba env create -f environment.yml
-micromamba activate dialogue-summarization
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 
 # Install PyTorch with CUDA support
 pip3 install --pre torch==2.6.0.dev20241112+cu121 torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu121 --no-cache-dir
@@ -24,31 +27,23 @@ pip3 install --pre torch==2.6.0.dev20241112+cu121 torchvision torchaudio --index
 ### 2. Weights & Biases Setup
 ```bash
 export WANDB_API_KEY="YOUR_API_KEY"
-source ~/.bashrc
 wandb login
 ```
 
 ### 3. Training
 ```bash
 # Basic training
-python scripts/train.py train --config-name config-baseline-centralized
+python scripts/train.py train --experiment baseline
 
 # Experiment variations
-python scripts/train.py train --config-name config-baseline-centralized --experiment swap_unbiased_speaker
-python scripts/train.py train --config-name config-baseline-centralized --experiment swap_regular_names
-
-# Custom postprocessing
-python scripts/train.py train --config-name config --override postprocessing=aggressive
-python scripts/train.py train --config-name config --override postprocessing=minimal
+python scripts/train.py train --experiment baseline --override experiment_name=swap_unbiased_speaker
+python scripts/train.py train --experiment baseline --override experiment_name=swap_regular_names
 ```
 
 ### 4. Inference
 ```bash
 # Generate submission file
 python scripts/inference.py submission /path/to/best/model.ckpt --output-file submission.csv
-
-# Custom prediction
-python scripts/inference.py predict /path/to/model.ckpt data/test.csv output.csv
 ```
 
 ## 📁 Project Structure
@@ -59,58 +54,26 @@ dialogue-summarization/
 ├── src/              # Source code
 │   ├── data/         # Data processing
 │   ├── models/       # Model implementations
-│   ├── evaluation/   # Evaluation metrics
-│   ├── inference/    # Inference pipeline
 │   └── utils/        # Utilities
 ├── scripts/          # Entry point scripts
-├── notebooks/        # Jupyter notebooks
-└── tests/            # Unit tests
+└── requirements.txt  # Dependencies
 ```
-
-## 🛠️ Configuration
-
-This project uses Hydra for configuration management. Key config groups:
-
-- **model**: Model architecture (KoBART, Solar API)
-- **dataset**: Data processing settings  
-- **training**: Training hyperparameters
-- **inference**: Generation parameters
-- **postprocessing**: Output cleaning strategies
 
 ## 🔬 Models
 
-### KoBART
-- Korean BART model optimized for dialogue summarization
-- Supports token swapping for speaker anonymization
-- Configurable generation parameters (beam search, repetition penalty, etc.)
-
-### Solar API
-- Alternative approach using Solar Chat API
-- Useful for comparison and ensemble methods
+**KoBART**: Korean BART model optimized for dialogue summarization with configurable generation parameters and speaker anonymization support.
 
 ## 📊 Performance
 
-Current baseline: **ROUGE-F1: 62.58%**
+Current baseline: **ROUGE-F1: 0.5025**
 
-Key metrics tracked:
-- ROUGE-1, ROUGE-2, ROUGE-L F1 scores
-- Generation length statistics
-- Training convergence metrics
+## 🛠️ Configuration
 
-## 📈 Experiment Tracking
-
-- **Weights & Biases** integration for experiment tracking
-- **Hydra** configuration versioning
-- **Model checkpointing** with best validation score
-- **Early stopping** based on ROUGE-F1 validation score
-
-## 🎯 Key Features
-
-- **Modular Architecture**: Easy to extend and modify
-- **Korean Language Support**: Optimized for Korean dialogue summarization
-- **Flexible Postprocessing**: Multiple strategies for output cleaning
-- **Production Ready**: Comprehensive logging, monitoring, and error handling
-- **Reproducible**: Seed management and configuration tracking
+Uses Hydra for configuration management with key config groups:
+- **model**: Model architecture settings
+- **training**: Training hyperparameters  
+- **generation**: Text generation parameters
+- **postprocessing**: Output cleaning strategies
 
 ## Environment Requirements
 
@@ -120,12 +83,3 @@ Key metrics tracked:
 - PyTorch Lightning
 - Hydra Core
 - Weights & Biases
-
-## Cleanup Commands
-
-```bash
-# Remove environment
-micromamba remove -n dialogue-summarization --all
-# or
-rm -rf /opt/conda/envs/dialogue-summarization
-```
